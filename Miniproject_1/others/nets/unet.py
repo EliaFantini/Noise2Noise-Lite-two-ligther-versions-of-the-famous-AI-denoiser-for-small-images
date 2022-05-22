@@ -9,7 +9,7 @@ class UNet(nn.Module):
         """Initializes U-Net."""
 
         super(UNet, self).__init__()
-        depthChannels= 48
+        depthChannels= 24
         # Layers: enc_conv0, enc_conv1, pool1
         self._block1 = nn.Sequential(
             nn.Conv2d(in_channels, depthChannels, 3, stride=1, padding=1),
@@ -23,6 +23,7 @@ class UNet(nn.Module):
             nn.Conv2d(depthChannels, depthChannels, 3, stride=1, padding=1),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(2))
+
 
         # Layers: enc_conv6, upsample5
         self._block3 = nn.Sequential(
