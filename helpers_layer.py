@@ -11,7 +11,7 @@ class Module(object):
         raise NotImplementedError
     
     def param(self):
-        return []
+        return [] # It should have (param, grad) or (param, None)
     
 
 class Sequential(Module):
@@ -40,12 +40,71 @@ class Sequential(Module):
         for module in self.modules:
             params.append(module.param())
         return params
+
     
+class Optimizer(object):
+    def step(self):
+        return NotImplementedError
+    
+    def zero_grad(self):
+        return NotImplementedError
+    
+    
+class SGD(Optimizer):
+    
+    def __init__(self, params, lr, mu = 0, tau = 0):
+        self.params = params
+        self.lr = lr
+        
+        # parameters in order to add momemtum 
+        self.momemtum = mu
+        self.dampening = tau
+        self.state_momemtum = None
+        
+    def step(self):
+        for x, grad in self.params: # Make sure that params have (param, grad)
+            x.add_(-self.lr * grad) #TODO: Make sure it updates params
+            
+    
+    def zero_grad(self):
+        for x, grad in self.params: # TODO: Make sure that params have (param, grad)
+            grad = grad.zero_() #TODO: Update these grad
 
+class MSE(Module):
+    
+    def forward(self, input, target):
+        self.input = input
+        self.target = target
+        return (self.input - self.target).pow(2).mean() 
+    
+    def backward(self):
+        return 2*(self.input - self.target).div(torch.tensor(self.input.size(0)))
+        ## we divide by the batch size as in Pytorch
 
+        
+class Sigmoid(Module):
+    
+    def forward(self,input):
+        self.input = input
+        self.sigmoid = 1./(1+(-self.input).exp())
+        return  self.sigmoid
+    
+    def backward(self,*gradwrtouput):
+        return gradwrtouput*self.sigmoid*(1-self.sigmoid)
+            
+class ReLU(Module):
+    def forward(self, input):
+        self.input = input
+        return (self.input>0.)*self.input
+    
+    def backward(self, *gradwrtouput):
+        return gradwrtouput*(self.input>=0.)
+
+            
 # TODO: Groups argument & padding mode is not taken care!
 
 class _ConvNd(Module):
+    # Base Class for Convolution Layers
     __constants__ = ['stride', 'padding', 'dilation', 'groups', 'padding_mode', 'in_channels', 'out_channels', 'kernel_size']
     __annotations__ = {'bias': Optional[Tensor]}
     
@@ -70,7 +129,7 @@ class _ConvNd(Module):
                 stride: Tuple[int, ...], padding: Tuple[int, ...],
                 dilation: Tuple[int, ...], transposed: bool,
                 output_padding: Tuple[int, ...],  
-                groups: int, bias: bool, padding_mode: str, 
+                groups: int, bias: bool, grad_bool: bool, padding_mode: str, 
                 device=None, dtype=None) -> None:
         
         factory_kwargs = {'device': device, 'dtype': dtype}
@@ -100,18 +159,35 @@ class _ConvNd(Module):
         self.output_padding = output_padding
         self.groups = groups
         self.padding_mode = padding_mode
+        self.grad_bool = grad_bool
         
         # TODO: Replace Parameter class
         if transposed:
             self.weight = empty(
                 (in_channels, out_channels // groups, *kernel_size), **factory_kwargs
             )
+            if self.grad_bool:
+                self.grad_weight = empty(
+                (in_channels, out_channels // groups, *kernel_size), **factory_kwargs
+                ).fill_(0.0)
+            else:
+                self.grad_weight = None
         else:
             self.weight = empty(
                 (out_channels, in_channels // groups, *kernel_size), **factory_kwargs
             )
+            if self.grad_bool:
+                self.grad_weight = empty(
+                (out_channels, in_channels // groups, *kernel_size), **factory_kwargs
+                )
+            else:
+                self.grad_weight = None
         if bias:
             self.bias = empty(out_channels, **factory_kwargs)
+            if self.grad_bool:
+                self.grad_bias = empty(out_channels, **factory_kwargs)
+            else:
+                self.grad_bias = None
         else:
             self.bias = None
         
@@ -127,6 +203,15 @@ class _ConvNd(Module):
         self.weight.uniform_(-sqrt_k, sqrt_k)
         if self.bias is not None:
             self.bias.uniform_(-sqrt_k, sqrt_k)
+        
+        if self.grad_bool:
+            # TODO: DO SOMETHING MEANINGFUL
+            pass
+    
+    def reset_grad(self) -> None:
+        # TODO: DO SOMETHING MEANINGFUL
+        self.grad_weight = None
+        self.grad_bias = None
             
 
 # TODO: F should have pad, 
@@ -137,8 +222,7 @@ def _pair(x):
     return x
 
 class Conv2d(_ConvNd):
-    
-    # TODO: replace _size_2_t
+    # Convolution 2d layer Class
     def __init__(
         self,
         in_channels: int,
@@ -149,20 +233,24 @@ class Conv2d(_ConvNd):
         dilation = 1,
         groups: int = 1,
         bias: bool = True,
+        grad_bool: bool = True,
         padding_mode: str = 'zeros',
         device = None,
         dtype = None,
     ) -> None:
+        # Change Parameters Accordingly
         factory_kwargs = {'device': device, 'dtype': dtype}
-        # TODO: replace _pair function
         kernel_size_ = _pair(kernel_size)
         stride_ = _pair(stride)
         padding_ = padding if isinstance(padding, str) else _pair(padding)
         dilation_ = _pair(dilation)
+        
         super(Conv2d, self).__init__(
             in_channels, out_channels, kernel_size_, stride_, padding_, dilation_, False, 
-            _pair(0), groups, bias, padding_mode, **factory_kwargs
+            _pair(0), groups, bias, grad_bool, padding_mode, **factory_kwargs
         )
+        
+        self.input = None
         
     def _conv_forward(self, input: Tensor, weight: Tensor, bias: Optional[Tensor]):
         if self.padding_mode != 'zeros':
@@ -170,23 +258,53 @@ class Conv2d(_ConvNd):
             return F.conv2d(F.pad(input, REVERSED_PADDING, mode=self.padding_mode),
                             weight, bias, self.stride,
                             _pair(0), self.dilation, self.groups)
+        
         return F.conv2d(input, weight, bias, self.stride,
                         self.padding, self.dilation, self.groups)   
     
     def forward(self, input: Tensor) -> Tensor:
+        self.input = input
         return self._conv_forward(input, self.weight, self.bias)
     
     def __call__(self, input: Tensor) -> Tensor:
-        return self.forward(input)
+        return self.forward(input)    
+    
+    def backward(self, grad_output):
+        grad_input = None
+        if self.input == None:
+            raise ValueError("Forward is not implemented, so backward cannot be implemented.")
+        grad_input = F.conv2d_grad_input(input_shape=self.input.shape, weight=self.weight, grad_output=grad_output, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups)
+        self.grad_weight = F.conv2d_grad_weight(self.input, self.weight.shape, grad_output, self.stride, self.padding, self.dilation, self.groups)
+        if self.bias is not None:
+            self.grad_bias = grad_output.sum((0, 2, 3)).squeeze(0)
+        
+        return grad_input
+    
+    # TODO: Check if it's correct or not, It should work with SGD
+    def param(self):
+        params = []
+        params.append(self.weight)
+        params.append(self.grad_weight)
+        params.append(self.bias)
+        params.append(self.grad_bias)
+        return params
+    
+    def update_params(self, params):
+        self.weight = params[0]
+        self.grad_weight = params[1]
+        self.bias = params[2]
+        self.grad_bias = params[3]
+            
     
 
 class _ConvTransposeNd(_ConvNd):
+    # Base Class for Transpose Convolution Layers
     def __init__(self, in_channels: int, 
                  out_channels: int, kernel_size: Tuple[int,...], 
                  stride: Tuple[int,...], padding: Tuple[int,...], 
                  dilation: Tuple[int,...], transposed: bool, 
                  output_padding: Tuple[int,...],
-                 groups: int, bias: bool, padding_mode: str, 
+                 groups: int, bias: bool, grad_bool: bool, padding_mode: str, 
                  device=None, dtype=None) -> None:
         
         if padding_mode != 'zeros':
@@ -196,7 +314,7 @@ class _ConvTransposeNd(_ConvNd):
         super(_ConvTransposeNd, self).__init__(
             in_channels, out_channels, kernel_size, stride,
             padding, dilation, transposed, output_padding,
-            groups, bias, padding_mode, **factory_kwargs)
+            groups, bias, grad_bool, padding_mode, **factory_kwargs)
         
     def _output_padding(self, input: Tensor, output_size: Optional[List[int]],
                        stride: List[int], padding: List[int], kernel_size: List[int],
@@ -246,7 +364,6 @@ class _ConvTransposeNd(_ConvNd):
 
 class ConvTranspose2d(_ConvTransposeNd):
     
-    # TODO: replace _size_2_t, _pair
     def __init__(
         self,
         in_channels: int,
@@ -259,9 +376,11 @@ class ConvTranspose2d(_ConvTransposeNd):
         bias: bool = True,
         dilation: int = 1,
         padding_mode: str = 'zeros',
+        grad_bool: bool = True,
         device = None,
         dtype = None,
     ) -> None:
+        
         factory_kwargs = {'device': device, 'dtype': dtype}
         kernel_size = _pair(kernel_size)
         stride_ = _pair(stride)
@@ -270,20 +389,32 @@ class ConvTranspose2d(_ConvTransposeNd):
         output_padding = _pair(output_padding)
         super(ConvTranspose2d, self).__init__(
             in_channels, out_channels, kernel_size, stride_, padding,
-            dilation, True, output_padding, groups, bias, padding_mode,
-            **factory_kwargs)
+            dilation, True, output_padding, groups, bias, grad_bool, 
+            padding_mode, **factory_kwargs)
+        
         
     def forward(self, input: Tensor, output_size: Optional[List[int]] = None) -> Tensor:
         if self.padding_mode != 'zeros':
             raise ValueError('Only "zeros" padding mode is supported for ConvTranspose2d')
-            
         assert isinstance(self.padding, tuple)
+        
         output_padding = self._output_padding(
             input, output_size, self.stride, self.padding, self.kernel_size,
             self.dilation)
+               
         return F.conv_transpose2d(
             input, self.weight, self.bias, stride=self.stride, padding=self.padding,
             output_padding=output_padding, groups=self.groups, dilation=self.dilation)
     
     def __call__(self, input: Tensor) -> Tensor:
         return self.forward(input)
+"""    
+    # Check if it's correct or not
+    def param(self):
+        params = []
+        params.append(self.weight)
+        params.append(self.grad_weight)
+        params.append(self.bias)
+        params.append(self.grad_bias)
+        return params
+"""
