@@ -1,25 +1,21 @@
 import torch
 from torch.utils.data.dataloader import DataLoader
 from others.Config import Config
-from others.nets import unet, unet2, unet3, DeepLabV3
+from others.nets import unet, unet2
 from others.dataset import Dataset
 import torchvision
-import time  # TODO: remove this
 
 
 class Model(torch.nn.Module):
     def __init__(self) -> None:
+        # initializes components
         super().__init__()
         if Config.net == 'Unet':
             self.net = unet.UNet()
         elif Config.net == 'Unet2':
             self.net = unet2.UNet()
-        elif Config.net == 'Unet3':
-            self.net = unet3.UNet()
-        elif Config.net == 'DeepLab':
-            self.net = DeepLabV3.createDeepLabv3()
         else:
-            raise ValueError("Invalid net value. Accepted (as string): 'Unet' ")
+            raise ValueError("Invalid net value. Accepted (as string): 'Unet','Unet2' ")
         if Config.optimizer == 'Adam':
             self.optimizer = torch.optim.Adam(params=self.net.parameters(), lr=Config.optimizer_params[0],
                                               betas=Config.optimizer_params[1:3], eps=Config.optimizer_params[3])
@@ -57,7 +53,6 @@ class Model(torch.nn.Module):
         if Config.verbose:
             print("Training started.")
 
-        start = time.time()
         for epoch in range(num_epochs):
             # Training
             self.net.train(mode=True)
@@ -92,8 +87,6 @@ class Model(torch.nn.Module):
                     batch_target = batch_target.to(self.device)
                     batch_outputs = self.net(batch_input)
                     validation_loss += self.criterion(batch_outputs, batch_target).data.item()
-                    #psnr += -10*torch.log10( torch.mean((batch_outputs - batch_target)**2)+10**-8)
-                    #psnr += 10 * torch.log10(1 / torch.nn.functional.mse_loss(batch_outputs, batch_target))
                     psnr += 20*torch.log10(torch.tensor(1.0))-10*torch.log10(((batch_outputs - batch_target)**2).mean((1, 2, 3))).mean()
                 validation_losses.append(validation_loss/len(validation_loader))
                 validation_psnr.append(psnr / len(validation_loader))
@@ -101,15 +94,15 @@ class Model(torch.nn.Module):
             if Config.verbose:
                 print(
                     f'Epoch: {epoch + 1}/{num_epochs} |train loss: {epochs_losses[-1]:.4f} |test loss: {validation_losses[-1]:.4f} |psnr(dB): {validation_psnr[-1]:.4f}')
+
             self.scheduler.step(validation_losses[-1])
+
             if validation_losses[-1] <= min_loss:
                 torch.save(self.state_dict(), f'bestmodel.pth')
                 min_loss = validation_losses[-1]
 
         if Config.verbose:
             print("Training finished. Best model saved.")
-        elapsed_time = time.time()-start
-        return epochs_losses, validation_losses, validation_psnr, elapsed_time
 
     def predict(self, test_input) -> torch.Tensor:
         source = test_input.div(255)
@@ -123,6 +116,6 @@ class Model(torch.nn.Module):
             transform = torchvision.transforms.Compose([torchvision.transforms.Normalize((mean_c1,mean_c2,mean_c3), (std_c1, std_c2, std_c3))])
             source = transform(source)
         source = source.to(self.device)
-        return self.net(source).mul(255).to('cpu')
+        return self.net(source).clamp(0,1).mul(255).to('cpu')
 
 
