@@ -8,6 +8,7 @@ class Dataset(Dataset):
     def __init__(self, source, target, config):
         self.source = source
         self.target = target
+        # adding augmented data with random flips and rotations
         if config.data_augmentation:
             for i in range(5):
                 ids = torch.randperm(source.shape[0])
@@ -28,9 +29,10 @@ class Dataset(Dataset):
                     random_target = F.hflip(random_target)
                 self.source = torch.cat([self.source,random_source])
                 self.target = torch.cat([self.target,random_target])
-
+        # scaling values in the range [0,1]
         self.source = self.source.div(255)
         self.target = self.target.div(255)
+        # doing data normalization
         if config.normalize:
             mean_c1 = self.source[:, :, :, 0].float().mean()
             mean_c2 = self.source[:, :, :, 1].float().mean()
@@ -46,9 +48,6 @@ class Dataset(Dataset):
         img, target = self.source[i], self.target[i]
         if self.transform is not None:
             img = self.transform(img)
-
-
-
         return img,target
 
     def __len__(self):
