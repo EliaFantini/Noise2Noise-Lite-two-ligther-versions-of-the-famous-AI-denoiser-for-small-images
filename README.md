@@ -28,6 +28,8 @@ The following image is an example of the performance of the original Noise2Noise
 - [Elia Fantini](https://github.com/EliaFantini/)
 - [Kieran Vaudaux](https://github.com/KieranVaudaux)
 - [Kaan Okumuş](https://github.com/okumuskaan)
+##
+
 
 ### How to install:
 Download this repository as a zip file and extract it into a folder.
@@ -36,19 +38,21 @@ This project has been developed and tested with python 3.8. The easiest way to r
 
 The only additional library required is PyTorch for the implementation of deep learning models and methods. If you don't have it, you can download it by following the instructions [here](https://pytorch.org/).
 
-Then, download the dataset available [here](https://drive.google.com/drive/u/2/folders/1CYsJ5gJkZWZAXJ1oQgUpGX7q5PxYEuNs) and put `train_data.pkl` and `val_data.pkl` inside both `Miniproject_1\others\dataset` and `Miniproject_2\others\dataset` folders. 
+Then, download the dataset available [here](https://drive.google.com/drive/u/2/folders/1CYsJ5gJkZWZAXJ1oQgUpGX7q5PxYEuNs) (unfortunately the drive is protected and it's for EPFL strudents only, the files were too big to be uploaded on GitHub), and put `train_data.pkl` and `val_data.pkl` inside both `Noise2Noise Lite\others\dataset` and `Noise2Noise from scratch\others\dataset` folders. 
 
 ### How to use
 
 Put your test.py in the base directory and run in your terminal (or on Anaconda Prompt) the following command that does all the testings: 
 ```bash
-python test.py -p "./PROJ_336006_SCIPER2_287703" -d "./PROJ_336006_SCIPER2_287703/Miniproject_1/others/dataset/"
+python test.py -p "./*NAME_OF_THE_FOLDER_WHERE_YOU_EXTRACTED_THE_REPOSITORY*" -d "./*NAME_OF_THE_FOLDER_WHERE_YOU_EXTRACTED_THE_REPOSITORY*/Noise2Noise Lite/others/dataset/"
 ```
 
-You can also test Conv2D function by comparing with PyTorch one. To do so, run:
+You can also test Conv2D function by comparing it with the PyTorch one. To do so, run:
 ```bash
-python test.py -p "./PROJ_336006_SCIPER2_287703" -d "./PROJ_SCIPER1_SCIPER2_287703/Miniproject_1/others/dataset/"
+python test.py -p "./*NAME_OF_THE_FOLDER_WHERE_YOU_EXTRACTED_THE_REPOSITORY*" -d "./*NAME_OF_THE_FOLDER_WHERE_YOU_EXTRACTED_THE_REPOSITORY*/Noise2Noise Lite/others/dataset/"
 ```
+
+If you
 ### Project Structure:
 
 ```bash
@@ -101,8 +105,7 @@ python test.py -p "./PROJ_336006_SCIPER2_287703" -d "./PROJ_SCIPER1_SCIPER2_2877
 
 ## 🛠 Skills
 
-Matplotlib, Pandas, Pytorch, Nltk, Seaborn, Sklearn. Big dataset manipulation with Pandas, Word frequency analysis, transfer-learning, unsupervised clustering with Bertopic, preprocessing of the quotes,
-sentiment analysis with transformer models (BERT) and VADER-Sentiment, Textstat library for grammatical structure and complexity analysis, build a classifier using a CNN.
+Python, Pytorch. Deep learning knowledge, good knowledge of all the components that constitute a neural network and its training. Deep knowledge of the Pytorch framework to rebuild from scratch all its basics components and its core mechanism, autograd.
 
 ## 🔗 Links
 [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/EliaFantini/)
