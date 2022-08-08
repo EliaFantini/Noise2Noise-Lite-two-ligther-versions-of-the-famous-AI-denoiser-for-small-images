@@ -10,10 +10,23 @@
   <img alt="GitHub star" src="https://img.shields.io/github/stars/EliaFantini/Noise2Noise-Lite-two-ligther-versions-of-the-famous-AI-denoiser-for-small-images?style=social">
 </p>
 
-This project 
-## General Information
 
-### Creator: Elia Fantini, Kieran Vaudaux, Kaan Okumuş
+This project is a revisiting of the famous denoiser Noise2Noise (click [here](https://arxiv.org/abs/1803.04189) for the original paper), which doesn't need any clean image but can be trained only using noisy data. 
+
+The revisiting was made in two versions: 
+- the first one relies on the U-Net architecture of the original paper with some slight changes to make the model ligther and less flexible, since the images we had to apply our model on were much smaller than the ones used on the original model. Every component is part of the Pytorch library. 
+- the second one instead implements an even simpler model but every single component of the neural network is coded from skratch, Pytorch functions use is reduces to its barebones.
+The following image is an example of the performance of the original Noise2Noise architecture:
+
+<p align="center">
+<img width="517" alt="Immagine 2022-08-08 182412" src="https://user-images.githubusercontent.com/62103572/183466131-805b2ae2-1d27-4592-baf7-595edc62c304.png">
+</p>
+
+## Authors
+
+- [Elia Fantini](https://github.com/EliaFantini/)
+- [Kieran Vaudaux](https://github.com/KieranVaudaux)
+- [Kaan Okumuş](https://github.com/okumuskaan)
 
 ### Environment:
 
@@ -26,7 +39,8 @@ This project has been developed and tested with python 3.8. The required librari
 
 The goal of the mini-projects is to implement a Noise2Noise model. A Noise2Noise model is an image denoising network trained without a clean reference image. The original paper can be found at [here](https://arxiv.org/abs/1803.04189).
 
-The project has two parts, focusing on two different facets of deep learning. The first one is to build a network that denoises using the PyTorch framework, in particular the torch.nn modules and autograd. The second one is to understand and build a framework, its constituent modules, that are the standard building blocks of deep networks without PyTorch’s autograd.
+The project has two parts, focusing on two different facets of deep learning. The first one is to build a network that denoises using the PyTorch framework, in particular the torch.nn modules and autograd. The second one is to understand and build a framework, its constituent modules, that are the standard building blocks of deep networks without PyTorch’s autograd.<img width="517" alt="Immagine 2022-08-08 182412" src="https://user-images.githubusercontent.com/62103572/183466087-de0644e0-5371-411e-b45b-78b15127e5b8.png">
+
 
 ### Dataset:
 - Dataset is available [here](https://drive.google.com/drive/u/2/folders/1CYsJ5gJkZWZAXJ1oQgUpGX7q5PxYEuNs).
