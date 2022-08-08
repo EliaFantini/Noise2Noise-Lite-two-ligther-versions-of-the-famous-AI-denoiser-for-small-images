@@ -121,7 +121,7 @@ This project has been developed and tested with python 3.8. The easiest way to r
 
 The only additional library required is PyTorch for the implementation of deep learning models and methods. If you don't have it, you can download it by following the instructions [here](https://pytorch.org/).
 
-Then, download the dataset available [here](https://drive.google.com/drive/u/2/folders/1CYsJ5gJkZWZAXJ1oQgUpGX7q5PxYEuNs) (unfortunately the drive is protected and it's for EPFL strudents only, the files were too big to be uploaded on GitHub), and put `train_data.pkl` and `val_data.pkl` inside both `Noise2Noise Lite\others\dataset` and `Noise2Noise from scratch\others\dataset` folders. 
+Then, download the dataset available [here](https://drive.google.com/drive/u/2/folders/1CYsJ5gJkZWZAXJ1oQgUpGX7q5PxYEuNs) (unfortunately the drive is protected and it's for EPFL strudents only, the files were too big to be uploaded on GitHub, contact me if you want to have access to it and you can't), and put `train_data.pkl` and `val_data.pkl` inside both `Noise2Noise Lite\others\dataset` and `Noise2Noise from scratch\others\dataset` folders. 
 
 ## How to use
 
