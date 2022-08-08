@@ -16,6 +16,7 @@ This project is a revisiting of the famous denoiser Noise2Noise (click [here](ht
 The revisiting was made in two versions, focusing on two different facets of deep learning: 
 - the first one relies on the U-Net architecture of the original paper with some slight changes to make the model ligther and less flexible (to avoid overfitting), since the images we had to apply our model on were much smaller than the ones used on the original model. Every component makes use of the PyTorch framework, in particular pf the torch.nn modules and autograd. 
 - the second one instead implements an even simpler model but every single component of the neural network is coded from scratch, Pytorch functions use is reduced to its barebones. The main focus of this version is to understand and build a framework with all its constituent modules, that are the standard building blocks of deep networks, without PyTorch’s autograd (which we reimplemented from scratch).
+
 The following image is an example of the performance of the original Noise2Noise architecture:
 
 <p align="center">
@@ -29,23 +30,25 @@ The following image is an example of the performance of the original Noise2Noise
 - [Kaan Okumuş](https://github.com/okumuskaan)
 
 ### How to install:
+Download this repository as a zip file and extract it into a folder.
 
-This project has been developed and tested with python 3.8. The required libraries are:
-    
-- PyTorch: for the implementation of deep learning models, methods.
-           If you don't have it, you can download it by following the instructions [here](https://pytorch.org/).
-***
-## Project Description & Guidance for Reproducing the Project:
+This project has been developed and tested with python 3.8. The easiest way to run the code is to install Anaconda 3 distribution (available for Windows, macOS and Linux). To do so, follow the guidelines from the official website (select python of version 3): https://www.anaconda.com/download/
 
-The goal of the mini-projects is to implement a Noise2Noise model. A Noise2Noise model is an image denoising network trained without a clean reference image. The original paper can be found at [here](https://arxiv.org/abs/1803.04189).
+The only additional library required is PyTorch for the implementation of deep learning models and methods. If you don't have it, you can download it by following the instructions [here](https://pytorch.org/).
 
-The project has two parts, focusing on two different facets of deep learning. The first one is to build a network that denoises using the PyTorch framework, in particular the torch.nn modules and autograd. The second one is to understand and build a framework, its constituent modules, that are the standard building blocks of deep networks without PyTorch’s autograd.
+Then, download the dataset available [here](https://drive.google.com/drive/u/2/folders/1CYsJ5gJkZWZAXJ1oQgUpGX7q5PxYEuNs) and put `train_data.pkl` and `val_data.pkl` inside both `Miniproject_1\others\dataset` and `Miniproject_2\others\dataset` folders. 
 
+### How to use
 
-### Dataset:
-- Dataset is available [here](https://drive.google.com/drive/u/2/folders/1CYsJ5gJkZWZAXJ1oQgUpGX7q5PxYEuNs).
-- Please put `train_data.pkl` and `val_data.pkl` inside both `Miniproject_1\others\dataset` and `Miniproject_2\others\dataset` folders. 
+Put your test.py in the base directory and run in your terminal (or on Anaconda Prompt) the following command that does all the testings: 
+```bash
+python test.py -p "./PROJ_336006_SCIPER2_287703" -d "./PROJ_336006_SCIPER2_287703/Miniproject_1/others/dataset/"
+```
 
+You can also test Conv2D function by comparing with PyTorch one. To do so, run:
+```bash
+python test.py -p "./PROJ_336006_SCIPER2_287703" -d "./PROJ_SCIPER1_SCIPER2_287703/Miniproject_1/others/dataset/"
+```
 ### Project Structure:
 
 ```bash
@@ -92,17 +95,8 @@ The project has two parts, focusing on two different facets of deep learning. Th
 ```
 
 
-***
-### Sample Run of the Model
 
-Put your test.py in the base directory and Run `python3 test.py -p "./PROJ_336006_SCIPER2_287703" -d "./PROJ_336006_SCIPER2_287703/Miniproject_1/others/dataset/"
-` in your terminal. This command does all your testings. 
 
-You can also test Conv2D function by comparing with PyTorch one. To do so, Run
-`python3 test.py -p "./PROJ_336006_SCIPER2_287703" -d "./PROJ_SCIPER1_SCIPER2_287703/Miniproject_1/others/dataset/"
-`
-
-***
 
 
 ## 🛠 Skills
