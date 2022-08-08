@@ -1,5 +1,16 @@
-# Deep Learning Mini Project
+<p align="center">
+  <img alt="🏁Noise2Noise_Lite" src="https://user-images.githubusercontent.com/62103572/183460246-3c3e57d0-6502-4396-a168-b7e5875d33a8.png">
+  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/y/EliaFantini/Noise2Noise-Lite-two-ligther-versions-of-the-famous-AI-denoiser-for-small-images">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/EliaFantini/Noise2Noise-Lite-two-ligther-versions-of-the-famous-AI-denoiser-for-small-images">
+  <img alt="GitHub code size" src="https://img.shields.io/github/languages/code-size/EliaFantini/Noise2Noise-Lite-two-ligther-versions-of-the-famous-AI-denoiser-for-small-images">
+  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/EliaFantini/Noise2Noise-Lite-two-ligther-versions-of-the-famous-AI-denoiser-for-small-images">
+  <img alt="GitHub follow" src="https://img.shields.io/github/followers/EliaFantini?label=Follow">
+  <img alt="GitHub fork" src="https://img.shields.io/github/forks/EliaFantini/Noise2Noise-Lite-two-ligther-versions-of-the-famous-AI-denoiser-for-small-images?label=Fork">
+  <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/EliaFantini/Noise2Noise-Lite-two-ligther-versions-of-the-famous-AI-denoiser-for-small-images?label=Watch">
+  <img alt="GitHub star" src="https://img.shields.io/github/stars/EliaFantini/Noise2Noise-Lite-two-ligther-versions-of-the-famous-AI-denoiser-for-small-images?style=social">
+</p>
 
+This project 
 ## General Information
 
 ### Creator: Elia Fantini, Kieran Vaudaux, Kaan Okumuş
