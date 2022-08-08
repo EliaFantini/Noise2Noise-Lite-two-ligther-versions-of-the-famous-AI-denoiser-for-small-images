@@ -11,11 +11,11 @@
 </p>
 
 
-This project is a revisiting of the famous denoiser Noise2Noise (click [here](https://arxiv.org/abs/1803.04189) for the original paper), which doesn't need any clean image but can be trained only using noisy data. 
+This project is a revisiting of the famous denoiser Noise2Noise (click [here](https://arxiv.org/abs/1803.04189) for the original paper), an image denoising network trained without a clean reference image: it doesn't need any clean image but can be trained only using noisy data. 
 
-The revisiting was made in two versions: 
-- the first one relies on the U-Net architecture of the original paper with some slight changes to make the model ligther and less flexible, since the images we had to apply our model on were much smaller than the ones used on the original model. Every component is part of the Pytorch library. 
-- the second one instead implements an even simpler model but every single component of the neural network is coded from skratch, Pytorch functions use is reduces to its barebones.
+The revisiting was made in two versions, focusing on two different facets of deep learning: 
+- the first one relies on the U-Net architecture of the original paper with some slight changes to make the model ligther and less flexible (to avoid overfitting), since the images we had to apply our model on were much smaller than the ones used on the original model. Every component makes use of the PyTorch framework, in particular pf the torch.nn modules and autograd. 
+- the second one instead implements an even simpler model but every single component of the neural network is coded from scratch, Pytorch functions use is reduced to its barebones. The main focus of this version is to understand and build a framework with all its constituent modules, that are the standard building blocks of deep networks, without PyTorch’s autograd (which we reimplemented from scratch).
 The following image is an example of the performance of the original Noise2Noise architecture:
 
 <p align="center">
@@ -28,7 +28,7 @@ The following image is an example of the performance of the original Noise2Noise
 - [Kieran Vaudaux](https://github.com/KieranVaudaux)
 - [Kaan Okumuş](https://github.com/okumuskaan)
 
-### Environment:
+### How to install:
 
 This project has been developed and tested with python 3.8. The required libraries are:
     
@@ -39,7 +39,7 @@ This project has been developed and tested with python 3.8. The required librari
 
 The goal of the mini-projects is to implement a Noise2Noise model. A Noise2Noise model is an image denoising network trained without a clean reference image. The original paper can be found at [here](https://arxiv.org/abs/1803.04189).
 
-The project has two parts, focusing on two different facets of deep learning. The first one is to build a network that denoises using the PyTorch framework, in particular the torch.nn modules and autograd. The second one is to understand and build a framework, its constituent modules, that are the standard building blocks of deep networks without PyTorch’s autograd.<img width="517" alt="Immagine 2022-08-08 182412" src="https://user-images.githubusercontent.com/62103572/183466087-de0644e0-5371-411e-b45b-78b15127e5b8.png">
+The project has two parts, focusing on two different facets of deep learning. The first one is to build a network that denoises using the PyTorch framework, in particular the torch.nn modules and autograd. The second one is to understand and build a framework, its constituent modules, that are the standard building blocks of deep networks without PyTorch’s autograd.
 
 
 ### Dataset:
@@ -103,6 +103,13 @@ You can also test Conv2D function by comparing with PyTorch one. To do so, Run
 `
 
 ***
-### Report
 
-Reports for Mini Project 1 and 2 can be found in `Miniproject_1\Report_1.pdf` and `Miniproject_2\Report_2.pdf` respectively.
+
+## 🛠 Skills
+
+Matplotlib, Pandas, Pytorch, Nltk, Seaborn, Sklearn. Big dataset manipulation with Pandas, Word frequency analysis, transfer-learning, unsupervised clustering with Bertopic, preprocessing of the quotes,
+sentiment analysis with transformer models (BERT) and VADER-Sentiment, Textstat library for grammatical structure and complexity analysis, build a classifier using a CNN.
+
+## 🔗 Links
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/EliaFantini/)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/-elia-fantini/)
