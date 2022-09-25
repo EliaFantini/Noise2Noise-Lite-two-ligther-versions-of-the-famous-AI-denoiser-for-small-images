@@ -187,5 +187,5 @@ The file **test.py** was created by the professor and his assistants to test the
 Python, Pytorch. Deep learning knowledge, good knowledge of all the components that constitute a neural network and its training. Deep knowledge of the Pytorch framework to rebuild from scratch all its basics components and its core mechanism, included **autograd**. Implementation from scratch of 2D convolution, Adam optimizer, ReLU, Sigmoid, a container like torch.nn.Sequential to put together an arbitrary configuration of modules together, Mean Squared Error as a Loss Function, Stochastic Gradient Descent (SGD) optimizer.
 
 ## 🔗 Links
-[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/EliaFantini/)
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://eliafantini.github.io/Portfolio/)
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/-elia-fantini/)
